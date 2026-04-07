@@ -9,11 +9,11 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
-const GetWeatherResultSchema = z.object({
-  city: z.string().describe("name of the city"),
-  degree_c: z.number().describe("the degree celcius of the temp"),
-  condition: z.string().optional().describe("condition of the weather"),
-});
+// const GetWeatherResultSchema = z.object({
+//   city: z.string().describe("name of the city"),
+//   degree_c: z.number().describe("the degree celcius of the temp"),
+//   condition: z.string().optional().describe("condition of the weather"),
+// });
 
 const getWeatherTool = tool({
   name: "get_weather",
@@ -50,7 +50,7 @@ const agent = new Agent({
         You are an expert weather agent that helps user to tell weather report of single or multiple cities. You can also send email to the user if they want to share the weather report with someone else.
     `,
   tools: [getWeatherTool, sendEmailTool],
-  outputType: GetWeatherResultSchema,
+  // outputType: GetWeatherResultSchema,
 });
 
 async function main(query = "") {

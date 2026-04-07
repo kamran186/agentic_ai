@@ -7,8 +7,10 @@ import fs from 'node:fs/promises';
 const fetchAvailablePlans = tool({
   name: 'fetch_available_plans',
   description: 'fetches the available plans for internet',
-  parameters: z.object({}),
-  execute: async function () {
+  parameters: z.object({
+    customerId: z.string().describe('id of the customer'),
+  }),
+  execute: async function ({ customerId }) {
     return [
       { plan_id: '1', price_inr: 399, speed: '30MB/s' },
       { plan_id: '2', price_inr: 999, speed: '100MB/s' },
@@ -61,5 +63,8 @@ async function runAgent(query = '') {
 }
 
 runAgent(
-  `I had a plan 399. I need a refund right now. my cus id is cust123 because of I am shifting to a new place`
+  `I had 5 users with the plan of 399.
+  user1, user2, user3, user4 and user5.
+  Also, I need to view plans for my internet connection for user 6.
+  As all of them have upgraded to 999, I want to issue refund for the previous month.`
 );
