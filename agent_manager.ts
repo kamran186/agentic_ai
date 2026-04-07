@@ -2,6 +2,8 @@ import 'dotenv/config';
 import { Agent, tool, run } from '@openai/agents';
 import { z } from 'zod';
 
+import { stdin as input, stdout as output } from "node:process";
+import { createInterface } from "node:readline/promises";
 import fs from 'node:fs/promises';
 
 const fetchAvailablePlans = tool({
@@ -57,9 +59,24 @@ const salesAgent = new Agent({
   ],
 });
 
+let conversation = true;
+let firstQuestion = true;
 async function runAgent(query = '') {
-  const result = await run(salesAgent, query);
-  console.log(result.finalOutput);
+  
+    const rl = createInterface({ input, output });
+    const question = await rl.question(`Ask Question? ${firstQuestion ? '[default]' : ''} `);
+    await rl.close();
+    firstQuestion = false;
+  
+    if(question.toLowerCase() === "exit") {
+      conversation = false;
+      console.log("Exiting conversation. Goodbye!");
+      return;
+    }
+    const result = await run(salesAgent, question  === 'default' ? query : question, {
+      conversationId: 'conv_69d56f5879c88195b419af0f857f400c0fab7f4b54ca803c',
+    });
+    console.log("Final Out:", result.finalOutput);
 }
 
 runAgent(
