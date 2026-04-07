@@ -1,0 +1,7 @@
+node_modules/
+.env
+
+# Optional editor files
+.vscode/
+
+*.txt

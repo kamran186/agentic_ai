@@ -1,0 +1,27 @@
+{
+  "name": "open_ai_agent",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "type": "module",
+  "scripts": {
+    "basic": "tsx index.ts",
+    "agent_tools": "tsx agent_tools.ts",
+    "agent_manager": "tsx agent_manager.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@openai/agents": "^0.8.3",
+    "axios": "^1.14.0",
+    "dotenv": "^17.4.1",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.2",
+    "tsx": "^4.21.0",
+    "typescript": "^6.0.2"
+  }
+}
