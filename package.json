@@ -8,6 +8,7 @@
     "agent_tools": "tsx agent_tools.ts",
     "agent_manager": "tsx agent_manager.ts",
     "agent_manager_handoffs": "tsx agent_manager_handoffs.ts",
+    "agent_manager_guardrails": "tsx agent_manager_guardrails.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
