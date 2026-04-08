@@ -1,3 +1,9 @@
+// ---------------------------------------------------------------------------
+// Agent Tools Example
+// ---------------------------------------------------------------------------
+// Demonstrates how to create reusable tools (getWeather, sendEmail) and
+// expose them to an agent. The agent can call these tools during execution.
+
 import { Agent, run, tool } from "@openai/agents";
 import { z } from "zod";
 import axios from "axios";
@@ -9,12 +15,19 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 
+// Example: a schema for structured weather results could be defined with Zod
 // const GetWeatherResultSchema = z.object({
 //   city: z.string().describe("name of the city"),
 //   degree_c: z.number().describe("the degree celcius of the temp"),
 //   condition: z.string().optional().describe("condition of the weather"),
 // });
 
+
+/**
+ * getWeatherTool
+ * Fetches a human-readable weather string from wttr.in. In production you may
+ * prefer a proper weather API and return structured data instead of plain text.
+ */
 const getWeatherTool = tool({
   name: "get_weather",
   description: "returns the current weather information for the given city",
@@ -28,6 +41,12 @@ const getWeatherTool = tool({
   },
 });
 
+
+/**
+ * sendEmailTool
+ * A mock email-sending tool. Replace the implementation with a call to your
+ * email provider (SendGrid, SES, etc.) if you want to actually deliver mail.
+ */
 const sendEmailTool = tool({
   name: "send_email",
   description: "This tool sends an email",
@@ -44,6 +63,8 @@ const sendEmailTool = tool({
   },
 });
 
+
+// Agent that can call both tools
 const agent = new Agent({
   name: "Weather Agent",
   instructions: `
@@ -53,6 +74,8 @@ const agent = new Agent({
   // outputType: GetWeatherResultSchema,
 });
 
+
+// Simple interactive runner that prompts the user and runs the agent
 async function main(query = "") {
   const rl = createInterface({ input, output });
   const name = await rl.question('Ask me about the weather of any city: ');

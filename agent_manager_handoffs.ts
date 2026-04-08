@@ -1,9 +1,23 @@
+// ---------------------------------------------------------------------------
+// Agent Manager with Handoffs
+// ---------------------------------------------------------------------------
+// Demonstrates a receptionist agent that can hand off work to specialized
+// agents (salesAgent and refundAgent) depending on the customer's request.
+
+// Load environment variables from .env
 import "dotenv/config";
+
+// Agent primitives and schema validation
 import { Agent, tool, run } from "@openai/agents";
 import { z } from "zod";
 
+// File system access for audit logs
 import fs from "node:fs/promises";
 
+// ------------------------------------------------------------------
+// Tools
+// ------------------------------------------------------------------
+// fetchAvailablePlans returns mock plan information (PKR prices in this example)
 const fetchAvailablePlans = tool({
   name: "fetch_available_plans",
   description: "fetches the available plans for internet in PKR",
@@ -19,6 +33,8 @@ const fetchAvailablePlans = tool({
   },
 });
 
+// processRefund appends refund records to a local file. In production this
+// would call a backend service or database.
 const processRefund = tool({
   name: "process_refund",
   description: `This tool processes the refund for a customer`,
@@ -36,12 +52,17 @@ const processRefund = tool({
   },
 });
 
+// ------------------------------------------------------------------
+// Agents
+// ------------------------------------------------------------------
+// refundAgent: handles refunds via processRefund tool
 const refundAgent = new Agent({
   name: "Refund Agent",
   instructions: `You are expert in issuing refunds to the customer`,
   tools: [processRefund],
 });
 
+// salesAgent: fetches plans and can delegate refunds
 const salesAgent = new Agent({
   name: "Sales Agent",
   instructions: `
@@ -57,6 +78,8 @@ const salesAgent = new Agent({
   ],
 });
 
+// receptionistAgent: a general entry-point agent that inspects user intent
+// and hands off to the appropriate specialized agent (sales or refunds).
 const receptionistAgent = new Agent({
   name: "Receptionist Agent",
   instructions: `You are expert in handling customer inquiries and directing them to the appropriate agent.
@@ -69,11 +92,16 @@ const receptionistAgent = new Agent({
   handoffs: [salesAgent, refundAgent],
 });
 
+// ------------------------------------------------------------------
+// Runner
+// ------------------------------------------------------------------
 async function runAgent(query = "") {
+  // Run the receptionist which will decide which agent should handle the query
   const result = await run(receptionistAgent, query);
   console.log(result.finalOutput);
 }
 
+// Example usage: a mixed query asking about plans and refunds
 runAgent(
     `Hi There, I want to know about the available plans for my internet connection. customerId: 12345. Also refund for the previous month as I had some issues with the connection. customerId: 12345, reason: poor connection.`,
 );
