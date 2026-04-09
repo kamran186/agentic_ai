@@ -12,6 +12,7 @@
     "agent_output_guardrails": "tsx agent_output_guardrails.ts",
     "create-conv": "tsx create-conv.ts",
     "conv": "tsx conv.ts",
+    "hloop": "tsx human-loop.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
@@ -22,6 +23,7 @@
     "@openai/agents": "^0.8.3",
     "axios": "^1.14.0",
     "dotenv": "^17.4.1",
+    "googleapis": "^171.4.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
