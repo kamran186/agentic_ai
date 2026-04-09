@@ -13,6 +13,7 @@
     "create-conv": "tsx create-conv.ts",
     "conv": "tsx conv.ts",
     "hloop": "tsx human-loop.ts",
+    "hagent": "tsx hosted-agent.ts",
     "build": "tsc",
     "start": "node dist/index.js"
   },
